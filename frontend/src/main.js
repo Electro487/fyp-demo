@@ -1,9 +1,16 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
-// Configuration & WebSocket Target
-const BACKEND_HTTP = 'https://fyp-demo-production-5c42.up.railway.app';
-const BACKEND_WS = 'wss://fyp-demo-production-5c42.up.railway.app/ws/seats';
+// Dynamic Environment Detection (Localhost vs Deployed Cloud)
+const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+const BACKEND_HTTP = isLocalHost 
+  ? 'http://localhost:8000' 
+  : 'https://fyp-demo-production-5c42.up.railway.app';
+
+const BACKEND_WS = isLocalHost 
+  ? 'ws://localhost:8000/ws/seats' 
+  : 'wss://fyp-demo-production-5c42.up.railway.app/ws/seats';
 
 // Seat Color Palettes (Vacant = Emerald Green, Occupied = Crimson Red)
 const COLOR_VACANT = new THREE.Color(0x10b981);

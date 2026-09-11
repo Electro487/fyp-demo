@@ -116,14 +116,19 @@ def load_config():
     }
 
 def send_update_to_backend(backend_url, seats_status):
-    """Post updated seat status dictionary asynchronously without blocking the main OpenCV video loop."""
+    """Post updated seat status dictionary asynchronously to both Cloud Backend and Localhost Backend."""
     def _async_post():
-        try:
-            url = f"{backend_url.rstrip('/')}/api/seats/update"
-            payload = {"seats": seats_status}
-            requests.post(url, json=payload, timeout=1.5)
-        except Exception:
-            pass
+        urls = [f"{backend_url.rstrip('/')}/api/seats/update"]
+        if "localhost" not in backend_url and "127.0.0.1" not in backend_url:
+            urls.append("http://localhost:8000/api/seats/update")
+
+        for url in urls:
+            try:
+                payload = {"seats": seats_status}
+                requests.post(url, json=payload, timeout=1.5)
+            except Exception:
+                pass
+
     threading.Thread(target=_async_post, daemon=True).start()
 
 def get_pixel_polygon(polygon_data, frame_w, frame_h):
