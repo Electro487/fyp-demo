@@ -53,8 +53,11 @@ class ShotJpgStream:
     def release(self):
         self.running = False
 
-class FreshVideoStream:
-    """Threaded OpenCV Video Stream wrapper for RTSP / HTTP video streams."""
+class OpenCVFastStream:
+    """
+    High-speed OpenCV stream wrapper using cap.grab() + cap.retrieve().
+    Flushes internal FFmpeg socket buffers at 30+ FPS for instant state transitions.
+    """
     def __init__(self, src):
         self.cap = cv2.VideoCapture(src)
         self.cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
@@ -64,19 +67,25 @@ class FreshVideoStream:
         self.lock = threading.Lock()
 
         if self.cap.isOpened():
-            self.ret, self.frame = self.cap.read()
-            self.thread = threading.Thread(target=self._update, daemon=True)
-            self.thread.start()
-
-    def _update(self):
-        while self.running and self.cap.isOpened():
             ret, frame = self.cap.read()
             if ret:
-                with self.lock:
-                    self.ret = ret
-                    self.frame = frame
+                self.ret = ret
+                self.frame = frame
+            self.thread = threading.Thread(target=self._update_loop, daemon=True)
+            self.thread.start()
+
+    def _update_loop(self):
+        while self.running and self.cap.isOpened():
+            # grab() instantly discards stale queued buffer frames in < 1ms
+            grabbed = self.cap.grab()
+            if grabbed:
+                ret, frame = self.cap.retrieve()
+                if ret:
+                    with self.lock:
+                        self.ret = ret
+                        self.frame = frame
             else:
-                time.sleep(0.01)
+                time.sleep(0.005)
 
     def read(self):
         with self.lock:
@@ -172,10 +181,10 @@ def main():
 
     if cap is None or not cap.isOpened():
         print(f"Opening video capture stream: {raw_stream_url}")
-        cap = FreshVideoStream(raw_stream_url)
+        cap = OpenCVFastStream(raw_stream_url)
         if not cap.isOpened():
             print(f"[WARNING] Stream URL unreachable. Falling back to local camera (0)...")
-            cap = FreshVideoStream(0)
+            cap = OpenCVFastStream(0)
 
     if not cap or not cap.isOpened():
         print("[ERROR] Cannot access video source. Exiting.")

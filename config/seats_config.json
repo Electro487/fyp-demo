@@ -2,7 +2,7 @@
   "stream_url": "http://192.168.1.71:8080/video",
   "backend_url": "http://localhost:8000",
   "backend_ws_url": "ws://localhost:8000/ws/seats",
-  "debounce_frames": 5,
+  "debounce_frames": 2,
   "confidence_threshold": 0.4,
   "seats": [
     {
