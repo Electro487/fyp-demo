@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Real-Time 3D Seat Occupancy Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+  <!-- 3D Canvas Container -->
+  <div id="canvas-container"></div>
+
+  # UI Overlay Dashboard
+  <div class="dashboard-overlay">
+    <!-- Header -->
+    <header class="glass-panel header-panel">
+      <div class="brand">
+        <div class="pulse-icon"></div>
+        <div>
+          <h1>SEAT SENSE 3D</h1>
+          <p class="subtitle">AI-Powered Real-Time Occupancy Monitor</p>
+        </div>
+      </div>
+      <div class="status-badge" id="connection-status">
+        <span class="dot yellow"></span>
+        <span id="status-text">CONNECTING...</span>
+      </div>
+    </header>
+
+    <!-- Main Stats Bar -->
+    <div class="stats-grid">
+      <div class="glass-panel stat-card">
+        <span class="stat-label">TOTAL SEATS</span>
+        <span class="stat-value" id="total-seats-val">3</span>
+      </div>
+      <div class="glass-panel stat-card">
+        <span class="stat-label">OCCUPIED</span>
+        <span class="stat-value occupied-text" id="occupied-seats-val">0</span>
+      </div>
+      <div class="glass-panel stat-card">
+        <span class="stat-label">VACANT</span>
+        <span class="stat-value vacant-text" id="vacant-seats-val">3</span>
+      </div>
+    </div>
+
+    <!-- Seat Zone Status Cards -->
+    <div class="seats-container">
+      <div class="glass-panel seat-card vacant" id="seat-card-1">
+        <div class="seat-header">
+          <span class="seat-id">ZONE 01</span>
+          <span class="seat-status-pill vacant" id="seat-pill-1">VACANT</span>
+        </div>
+        <h3 class="seat-title">Seat A (Left)</h3>
+        <div class="seat-meta">
+          <span class="meta-label">Updated:</span>
+          <span class="meta-val" id="seat-time-1">Just now</span>
+        </div>
+        <button class="test-btn" onclick="window.toggleSeat(1)">Simulate Occupancy</button>
+      </div>
+
+      <div class="glass-panel seat-card vacant" id="seat-card-2">
+        <div class="seat-header">
+          <span class="seat-id">ZONE 02</span>
+          <span class="seat-status-pill vacant" id="seat-pill-2">VACANT</span>
+        </div>
+        <h3 class="seat-title">Seat B (Center)</h3>
+        <div class="seat-meta">
+          <span class="meta-label">Updated:</span>
+          <span class="meta-val" id="seat-time-2">Just now</span>
+        </div>
+        <button class="test-btn" onclick="window.toggleSeat(2)">Simulate Occupancy</button>
+      </div>
+
+      <div class="glass-panel seat-card vacant" id="seat-card-3">
+        <div class="seat-header">
+          <span class="seat-id">ZONE 03</span>
+          <span class="seat-status-pill vacant" id="seat-pill-3">VACANT</span>
+        </div>
+        <h3 class="seat-title">Seat C (Right)</h3>
+        <div class="seat-meta">
+          <span class="meta-label">Updated:</span>
+          <span class="meta-val" id="seat-time-3">Just now</span>
+        </div>
+        <button class="test-btn" onclick="window.toggleSeat(3)">Simulate Occupancy</button>
+      </div>
+    </div>
+
+    <!-- Footer / Control hint -->
+    <footer class="glass-panel footer-panel">
+      <div class="hint-text">
+        <span>💡 <strong>3D Controls:</strong> Click & drag to rotate scene | Scroll to zoom</span>
+      </div>
+    </footer>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
