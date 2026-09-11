@@ -2,8 +2,8 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 // Configuration & WebSocket Target
-const BACKEND_HTTP = 'http://localhost:8000';
-const BACKEND_WS = 'ws://localhost:8000/ws/seats';
+const BACKEND_HTTP = 'https://fyp-demo-production-5c42.up.railway.app';
+const BACKEND_WS = 'wss://fyp-demo-production-5c42.up.railway.app/ws/seats';
 
 // Seat Color Palettes (Vacant = Emerald Green, Occupied = Crimson Red)
 const COLOR_VACANT = new THREE.Color(0x10b981);

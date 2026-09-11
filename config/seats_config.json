@@ -1,7 +1,7 @@
 {
   "stream_url": "http://192.168.1.71:8080/video",
-  "backend_url": "http://localhost:8000",
-  "backend_ws_url": "ws://localhost:8000/ws/seats",
+  "backend_url": "https://fyp-demo-production-5c42.up.railway.app",
+  "backend_ws_url": "wss://fyp-demo-production-5c42.up.railway.app/ws/seats",
   "debounce_frames": 2,
   "confidence_threshold": 0.4,
   "seats": [
