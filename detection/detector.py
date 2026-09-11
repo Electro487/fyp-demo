@@ -116,14 +116,15 @@ def load_config():
     }
 
 def send_update_to_backend(backend_url, seats_status):
-    """Post updated seat status dictionary {seat_id: state} to FastAPI backend."""
-    try:
-        url = f"{backend_url.rstrip('/')}/api/seats/update"
-        payload = {"seats": seats_status}
-        resp = requests.post(url, json=payload, timeout=2.0)
-        return resp.status_code == 200
-    except Exception:
-        return False
+    """Post updated seat status dictionary asynchronously without blocking the main OpenCV video loop."""
+    def _async_post():
+        try:
+            url = f"{backend_url.rstrip('/')}/api/seats/update"
+            payload = {"seats": seats_status}
+            requests.post(url, json=payload, timeout=1.5)
+        except Exception:
+            pass
+    threading.Thread(target=_async_post, daemon=True).start()
 
 def get_pixel_polygon(polygon_data, frame_w, frame_h):
     """
